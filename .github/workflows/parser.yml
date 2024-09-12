@@ -5,6 +5,11 @@ on:
     - cron: '0 */4 * * *' # Triggers every 4 hours
   workflow_dispatch: # Allows manual triggering from the GitHub UI
 
+permissions:
+  contents: write  # Required for committing changes
+  pull-requests: write  # Required for creating or updating pull requests
+
+
 jobs:
   update-data:
     runs-on: ubuntu-latest
