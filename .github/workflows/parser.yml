@@ -55,7 +55,7 @@ jobs:
     - name: Create a new branch and commit changes
       run: |
         git checkout -b update-data-branch
-        git add data/data.json
+        git add data.json
         git commit -m 'Update API results'
         git push origin update-data-branch
       env:
