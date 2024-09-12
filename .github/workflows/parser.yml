@@ -48,7 +48,7 @@ jobs:
             results[api] = get_url('https://www.youtube.com/watch?v={}'.format(api))
           except Exception as e:
             results[api] = {'error': str(e)}
-        with open('data/data.json', 'w') as f:
+        with open('data.json', 'w') as f:
           json.dump(results, f, indent=2)
         "
         
