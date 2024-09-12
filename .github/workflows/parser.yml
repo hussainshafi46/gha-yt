@@ -36,7 +36,7 @@ jobs:
         import json
         from yt_dlp import YoutubeDL
         def get_url(url):
-          ydl_opt = {'format': 'bestaudio'}
+          ydl_opt = {'format': 'bestaudio', 'cookiefile': None, 'verbose': True}
           def not_null(*args):
             return not any(arg is None or arg == "none" for arg in args)
           with YoutubeDL(ydl_opt) as ydl:
