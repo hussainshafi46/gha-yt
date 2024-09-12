@@ -28,45 +28,30 @@ jobs:
     - name: Perform API requests and update data
       run: |
         python -c "
-import json
-from yt_dlp import YoutubeDL
-
-def get_url(url):
-    ydl_opt = {
-        "format": "bestaudio",
-    }
-
-    def not_null(*args):
-        return not any(arg is None or arg == "none" for arg in args)
-
-    with YoutubeDL(ydl_opt) as ydl:
-        info = ydl.extract_info(url, download=False)
-        filtered_audio = filter(
-            lambda x: not_null(x.get("acodec"), x.get("asr")), info.get("formats"),
-        )
-        best_audio = max(filtered_audio, key=lambda x: int(x.get("asr")))
-
-    return {url[-11:]: best_audio.get("url")}
-
-# Load API list
-with open('api-list.json', 'r', encoding='utf-8') as f:
-    api_list = set(f.read().split())
-print(api_list)
-# Prepare results
-results = {}
-for api in api_list:
-    try:
-        results[api] = get_url('https://www.youtube.com/watch?v={}'.format(api))
-    except Exception as e:
-        results[api] = {
-            'error': str(e)
-        }
-
-# Save results to data.json
-with open('data/data.json', 'w') as f:
-    json.dump(results, f, indent=2)
+        import json
+        from yt_dlp import YoutubeDL
+        def get_url(url):
+          ydl_opt = {'format': 'bestaudio'}
+          def not_null(*args):
+            return not any(arg is None or arg == "none" for arg in args)
+          with YoutubeDL(ydl_opt) as ydl:
+            info = ydl.extract_info(url, download=False)
+            filtered_audio = filter(lambda x: not_null(x.get('acodec'), x.get('asr')), info.get('formats'))
+            best_audio = max(filtered_audio, key=lambda x: int(x.get("asr")))
+          return {url[-11:]: best_audio.get("url")}
+        with open('api-list.json', 'r', encoding='utf-8') as f:
+          api_list = set(f.read().split())
+        print(api_list)
+        results = {}
+        for api in api_list:
+          try:
+            results[api] = get_url('https://www.youtube.com/watch?v={}'.format(api))
+          except Exception as e:
+            results[api] = {'error': str(e)}
+        with open('data/data.json', 'w') as f:
+          json.dump(results, f, indent=2)
         "
-
+        
     - name: Create a new branch and commit changes
       run: |
         git checkout -b update-data-branch
