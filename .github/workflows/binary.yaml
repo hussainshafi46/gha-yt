@@ -1,0 +1,76 @@
+name: API Polling and Data Update
+
+on:
+  workflow_dispatch: # Allows manual triggering from the GitHub UI
+
+permissions:
+  contents: write  # Required for committing changes
+  pull-requests: write  # Required for creating or updating pull requests
+
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+      with:
+        ref: main
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install yt-dlp
+
+    - name: Perform API requests and update data
+      run: |
+        python -c "
+        import json
+        from yt_dlp import YoutubeDL
+        def get_url(url):
+          ydl_opt = {'format': 'bestaudio', 'cookiefile': 'all_cookies.txt', 'verbose': True}
+          def not_null(*args):
+            return not any(arg is None or arg == "none" for arg in args)
+          with YoutubeDL(ydl_opt) as ydl:
+            info = ydl.extract_info(url, download=False)
+            filtered_audio = filter(lambda x: not_null(x.get('acodec'), x.get('asr')), info.get('formats'))
+            best_audio = max(filtered_audio, key=lambda x: int(x.get("asr")))
+          return {url[-11:]: best_audio.get("url")}
+        with open('api-list.json', 'r', encoding='utf-8') as f:
+          api_list = set(f.read().split())
+        print(api_list)
+        results = {}
+        for api in api_list:
+          try:
+            results[api] = get_url('https://www.youtube.com/watch?v={}'.format(api))
+          except Exception as e:
+            results[api] = {'error': str(e)}
+        with open('data.json', 'w') as f:
+          json.dump(results, f, indent=2)
+        "
+        
+    - name: Create a new branch and commit changes
+      run: |
+        git config user.name 'github-actions'
+        git config user.email 'github-actions@github.com'
+        git add data.json
+        git commit -m 'Update API results'
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
+      with:
+        title: 'Update API results'
+        body: 'Automated update of API results.'
+        base: main
+        head: update-data-branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
