@@ -22,7 +22,7 @@ jobs:
       run: |
         curl -L https://github.com/yt-dlp/yt-dlp/releases/download/2024.08.06/yt-dlp_linux -o /usr/local/bin/yt-dlp && chmod +x /usr/local/bin/yt-dlp
         yt-dlp --help
-        apt install -y ffmpeg
+        sudo apt install -y ffmpeg
     
     # - name: Create a new branch and commit changes
     #   run: |
