@@ -21,8 +21,8 @@ jobs:
     - name: Get Dependencies
       run: |
         curl -L https://github.com/yt-dlp/yt-dlp/releases/download/2024.08.06/yt-dlp_linux -o /usr/local/bin/yt-dlp && chmod +x /usr/local/bin/yt-dlp
-        yt-dlp --help
-        sudo apt install -y ffmpeg
+        sudo apt install -yq ffmpeg
+        ls -al
     
     # - name: Create a new branch and commit changes
     #   run: |
