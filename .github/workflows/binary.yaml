@@ -1,4 +1,4 @@
-name: API Polling and Data Update
+name: YT-DLP Binary
 
 on:
   workflow_dispatch: # Allows manual triggering from the GitHub UI
