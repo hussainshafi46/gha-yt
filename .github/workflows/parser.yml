@@ -1,8 +1,6 @@
 name: API Polling and Data Update
 
 on:
-  schedule:
-    - cron: '0 */4 * * *' # Triggers every 4 hours
   workflow_dispatch: # Allows manual triggering from the GitHub UI
 
 permissions:
