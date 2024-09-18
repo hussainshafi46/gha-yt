@@ -21,7 +21,7 @@ except:
 while pageNumber:
     print(f"Query Page ({initial}):", pageNumber)
     try:
-        response = get(url=f'https://genius.com/artists-index/{initial}/all?page={pageNumber}')
+        response = get(url=f'https://genius.com/artists-index/{initial}/all?page={pageNumber}', headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/125.0"})
         print("Query Status:", response.status_code)
         if response.status_code != 200:
             break
