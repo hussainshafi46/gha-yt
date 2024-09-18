@@ -43,9 +43,14 @@ jobs:
         if pageNumber == 0:
         	print(f"COMPLETED FETCHING {initial}")
         	sys.exit(0)
-        	
-        with open(f"artists/{initial}.json", 'r', encoding='utf-8') as f:
-        	artists = json.load(f)
+
+        
+        artists = {}
+        try:
+          with open(f"artists/{initial}.json", 'r', encoding='utf-8') as f:
+          	artists |= json.load(f)
+        except:
+          pass
         
         while pageNumber:
         	print(f"Query Page ({initial}):", pageNumber)
