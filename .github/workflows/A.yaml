@@ -45,7 +45,7 @@ jobs:
         	sys.exit(0)
         	
         with open(f"artists/{initial}.json", 'r', encoding='utf-8') as f:
-        	artists = load(f)
+        	artists = json.load(f)
         
         while pageNumber:
         	print(f"Query Page ({initial}):", pageNumber)
