@@ -1,0 +1,34 @@
+name: Song List
+
+on:
+  workflow_dispatch: # Allows manual triggering from the GitHub UI
+
+permissions:
+  contents: write  # Required for committing changes
+  pull-requests: write  # Required for creating or updating pull requests
+
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+      with:
+        ref: main
+
+    - name: Get Dependencies
+      run: |
+        sudo apt install -y jq python
+        python fetch.py 132 Usher
+    
+    - name: Create a new branch and commit changes
+      run: |
+        git config user.name 'github-actions'
+        git config user.email 'github-actions@github.com'
+        git add Usher.json
+        git commit -m 'Update Usher'
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
