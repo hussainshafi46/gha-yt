@@ -26,8 +26,8 @@ jobs:
     - name: Get Dependencies
       run: |
         #sudo apt install -y jq python
-        python -m pip install --upgrade pip
-        pip install requests
+        python -m pip install --upgrade pip -q
+        pip install requests -q
         python fetch.py 132 Usher
     
     - name: Create a new branch and commit changes
