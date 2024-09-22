@@ -18,9 +18,14 @@ jobs:
       with:
         ref: main
 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
     - name: Get Dependencies
       run: |
-        sudo apt install -y jq python
+        #sudo apt install -y jq python
         python fetch.py 132 Usher
     
     - name: Create a new branch and commit changes
