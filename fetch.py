@@ -9,7 +9,7 @@ def fetchSongs(artist_id, atrist_name):
     while next_page:
         songs_api = f'https://genius.com/api/artists/{artist_id}/songs?page={next_page}&per_page=50&sort=title'
         try:
-            resp = get(songs_api).json()
+            resp = get(songs_api, headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"}, proxies={'http':'186.190.225.152:999', 'https':'186.190.225.152:999'}).json()
             pprint(resp)
             meta = resp['meta']
             #assert meta['status'] == 200
@@ -17,7 +17,7 @@ def fetchSongs(artist_id, atrist_name):
             results.extend(resp['response']['songs'])
         except Exception as e:
             print("EXCEPTION: ", songs_api)
-            print(e)
+            print("Error is:", e)
             break
     with open(f"{atrist_name}.json", 'w', encoding='utf-8') as f:
         dump(results, f, indent=4)
