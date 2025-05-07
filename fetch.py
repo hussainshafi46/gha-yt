@@ -9,6 +9,10 @@ API_BASE_URL = "https://genius.com/api/artists/{artist_id}/songs?page={page}&per
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0"
 }
+PROXIES = {
+    "http": "http://186.190.225.152:999",
+    "https": "http://186.190.225.152:999"
+}
 MAX_CONCURRENT_REQUESTS = 5  # Limit concurrent requests to avoid overloading the API
 
 async def fetch_page(session, artist_id, page, semaphore):
@@ -19,7 +23,7 @@ async def fetch_page(session, artist_id, page, semaphore):
         await asyncio.sleep(random.uniform(1, 3))  # Rate limiting (random delay)
         
         try:
-            async with session.get(url, headers=HEADERS) as response:
+            async with session.get(url, headers=HEADERS, proxy=PROXIES["https"]) as response:
                 response.raise_for_status()
                 data = await response.json()
 
