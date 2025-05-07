@@ -1,0 +1,28 @@
+name: Key-Value
+
+on:
+  workflow_dispatch:  
+
+jobs:
+  run-script:
+    strategy:
+      matrix: 
+        include: 
+          - {"key": "Adele", "value": "2300"}
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install aiohttp
+
+      - name: Run script with key-value pair
+        run: python fetch_songs.py ${{ matrix.value }} ${{ matrix.key }}
