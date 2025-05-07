@@ -25,4 +25,4 @@ jobs:
         run: pip install aiohttp
 
       - name: Run script with key-value pair
-        run: python fetch_songs.py ${{ matrix.value }} ${{ matrix.key }}
+        run: python fetch.py ${{ matrix.value }} ${{ matrix.key }}
